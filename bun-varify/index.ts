@@ -1,13 +1,33 @@
+import { useGetAllUsers } from "./src/controller"
+import type { userType } from "./src/shared/types"
+
+const setResponse = <T extends {}>(data: T): Response => {
+    const res = Response.json({ data: data })
+
+    res.headers.set("Access-Control-Allow-Origin", "*")
+    res.headers.set(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PUT, DELETE, OPTIONS",
+    )
+
+    return res
+}
+
 const server = Bun.serve({
-  port: 6060,
-  fetch(req) {
-    const url = new URL(req.url);
-    if (url.pathname === "/") return new Response("Bun!");
-    else if (url.pathname === "/getTask") return new Response("hogehoge");
-    else if (url.pathname === "/post") return new Response("hogehoge");
+    port: 6060,
+    fetch(req) {
+        const url = new URL(req.url)
 
-    return new Response("404");
-  },
-});
+        if (url.pathname === "/") {
+            const resData: userType[] = useGetAllUsers()
 
-console.log(`Listening on http://localhost:${server.port} ...`);
+            const res = setResponse(resData)
+
+            return res
+        }
+
+        return new Response("404")
+    },
+})
+
+console.log(`Listening on http://localhost:${server.port} ...`)
