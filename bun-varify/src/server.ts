@@ -1,4 +1,4 @@
-import { useGetAllUsers } from "./controller"
+import { notFound, useGetAllUsers } from "./controller"
 
 export const server = () => {
     const server = Bun.serve({
@@ -8,7 +8,7 @@ export const server = () => {
 
             if (url.pathname === "/") return useGetAllUsers()
 
-            return new Response("404")
+            return notFound()
         },
     })
 
