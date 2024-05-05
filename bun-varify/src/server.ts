@@ -1,6 +1,8 @@
 import { notFound, useGetAllUsers } from "./controller"
 
 export const server = () => {
+    const start = performance.now()
+
     const server = Bun.serve({
         port: 6060,
         fetch(req) {
@@ -13,4 +15,8 @@ export const server = () => {
     })
 
     console.log(`Listening on http://localhost:${server.port} ...`)
+
+    const end = performance.now()
+
+    console.log(end - start)
 }
